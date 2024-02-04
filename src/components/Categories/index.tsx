@@ -13,11 +13,13 @@ const Categories = ({ categories, selectedCategory, onCategoryPress }: Categorie
         <FlatList
             data={categories}
             horizontal
+            showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => {
                 const isSelected = selectedCategory === item;
+                const displayName = item.replaceAll('_', ' ')
                 return (
                     <TouchableOpacity onPress={() => onCategoryPress(item)} style={styles.itemContainer}>
-                        <Text style={[styles.item, isSelected ? styles.selectedCategory : {}]}>{item}</Text>
+                        <Text style={[styles.item, isSelected ? styles.selectedCategory : {}]}>{displayName}</Text>
                     </TouchableOpacity>
                 );
             }}

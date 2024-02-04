@@ -14,13 +14,13 @@ const Card = ({ title, image, time, style }: CardProps) => {
     return (
         <View style={[styles.container, style]}>
             <View style={styles.column}>
-                <Image style={styles.dishImage} source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLJ1bTXcfEScZ0qC-Udl2G59lDQS8OGr7h0Q&usqp=CAU' }} />
+                <Image style={styles.dishImage} source={{ uri: image }} />
                 <Text numberOfLines={3} style={styles.title}>{title}</Text>
             </View>
-            <View style={[styles.column, styles.footer]}>
+            {(time && time > '0') ? <View style={[styles.column, styles.footer]}>
                 <Text style={[styles.footerText, { color: colors.lightGray2 }]}>Time</Text>
-                <Text style={styles.footerText}>{time}</Text>
-            </View>
+                <Text style={styles.footerText}>{time} min</Text>
+            </View> : <View></View>}
         </View>
     )
 };

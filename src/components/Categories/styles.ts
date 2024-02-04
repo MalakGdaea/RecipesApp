@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
         padding: 6,
         paddingHorizontal: 12,
         fontWeight: 'bold',
+        textTransform: 'capitalize',
     },
     itemContainer: {
         marginRight: 8,

@@ -1,14 +1,14 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useContext, useEffect, useState } from "react";
 import RootStackParamList from "../../types/RootStackParamList";
 import SearchInput from "../../components/SearchInput";
 import styles from './styles'
 import Title from "../../components/Title";
 import Categories from "../../components/Categories";
 import RecipeCard from "../../components/RecipeCard";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import Card from "../../components/Card";
+import { HealthyRecipesContext, RecipesContext } from "../../../src/contexts";
 
 type HomeNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 type HomeProps = {
@@ -16,31 +16,53 @@ type HomeProps = {
 }
 
 const Home = ({ navigation }: HomeProps) => {
-    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [selectedTag, setSelectedTag] = useState('');
+    const [tags, setTags] = useState<string[]>([]);
+    const { recipes } = useContext(RecipesContext);
+    const { healthyRecipes } = useContext(HealthyRecipesContext);
+
+    useEffect(() => {
+        const tagsList: string[] = [];
+        recipes.forEach((recipe) => {
+            recipe.tags.forEach((tag) => {
+                if (!tagsList.includes(tag.name)) {
+                    tagsList.push(tag.name);
+                }
+            });
+        })
+        setTags([...tagsList]);
+    }, recipes);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <SearchInput pressable onPress={() => navigation.navigate('Search')} />
-            <Title titleText="Featured Recipes" style={{ marginTop: 20 }} />
+            <Title titleText="Healthy Recipes" style={{ marginTop: 20 }} />
             <FlatList
                 horizontal
-                data={[1, 2, 3]}
+                data={healthyRecipes}
+                keyExtractor={item => String(item?.id)}
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ index }) => (
-                    <RecipeCard title="Steak with tomato sauce and bulgar rice." time={'20 min'} rating={3.6} style={index === 0 ? { marginLeft: 3 } : {}}
-                        author={{ name: 'James Milner', image: 'https://img.freepik.com/free-photo/close-up-portrait-curly-handsome-european-male_176532-8133.jpg?size=626&ext=jpg&ga=GA1.2.1100847543.1704207944&semt=ais' }} />
+                renderItem={({ item, index }) => (
+                    <RecipeCard title={item?.name}
+                        time={item?.cook_time_minutes}
+                        rating={item?.user_ratings?.score} style={index === 0 ? { marginLeft: 3 } : {}}
+                        image={item?.thumbnail_url}
+                        author={{ name: item.credits[0].name, image_url: item.credits[0].image_url }} />
                 )}
             />
-            <Categories categories={['All', 'Trending']} selectedCategory={selectedCategory} onCategoryPress={setSelectedCategory} />
+            <Categories categories={tags} selectedCategory={selectedTag} onCategoryPress={setSelectedTag} />
             <FlatList
                 horizontal
-                data={[1, 2, 3]}
+                data={recipes}
                 showsHorizontalScrollIndicator={false}
-                renderItem={() => (
-                    <Card title="Steak with tomato sauce and bulgar rice." time={'20 min'} />
+                renderItem={({ item }) => (
+                    <Card
+                        title={item?.name}
+                        time={item?.cook_time_minutes}
+                        image={item?.thumbnail_url} />
                 )}
             />
-        </SafeAreaView>
+        </View>
     )
 }
 

@@ -8,9 +8,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(217,217,217,0.5)',
         borderRadius: 12,
         padding: 10,
-        width: width * 0.43,
+        width: width * 0.4,
+        height: width * 0.48,
         marginTop: 65,
         marginRight: 16,
+        position: 'relative',
     },
     title: {
         color: colors.gray,
@@ -31,8 +33,10 @@ const styles = StyleSheet.create({
         marginTop: -60,
     },
     footer: {
-        marginTop: 15,
         alignItems: 'flex-start',
+        position: 'absolute',
+        bottom: 10,
+        left: 10,
     },
     footerText: {
         fontSize: 11,

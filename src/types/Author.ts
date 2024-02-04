@@ -1,6 +1,6 @@
 type Author = {
     name: string,
-    image: string,
+    image_url: string,
 }
 
 export default Author;

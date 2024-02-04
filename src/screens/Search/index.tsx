@@ -1,12 +1,38 @@
-import React from "react";
-import { SafeAreaView } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { FlatList, SafeAreaView } from "react-native";
 import SearchInput from "../../components/SearchInput";
 import styles from './styles'
+import Card from "../../components/Card";
+import { RecipesContext } from "../../contexts";
+import Recipe from "../../types/Recipe";
 
 const Search = () => {
+    const { recipes } = useContext(RecipesContext);
+    const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
+    const [keyword, setKeyword] = useState('');
+
+    useEffect(() => {
+        if (keyword.length > 2) {
+            const updatedFilteredRecipes = recipes?.filter((recipe) => recipe?.name?.toLocaleLowerCase().includes(keyword.toLocaleLowerCase()));
+            setFilteredRecipes(updatedFilteredRecipes);
+        } else {
+            setFilteredRecipes([]);
+        }
+    }, [keyword]);
+
     return (
         <SafeAreaView style={styles.container}>
-            <SearchInput />
+            <SearchInput autoFocus onChangeText={setKeyword} />
+            <FlatList
+                data={filteredRecipes}
+                numColumns={2}
+                keyExtractor={item => String(item?.id)}
+                renderItem={({ item }) => (
+                    <Card
+                        title={item?.name}
+                        time={item?.cook_time_minutes}
+                        image={item?.thumbnail_url} />
+                )} />
         </SafeAreaView>
     )
 }

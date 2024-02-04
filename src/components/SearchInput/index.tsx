@@ -11,14 +11,14 @@ interface SearchInputProps {
     style?: ViewStyle;
 }
 
-const SearchInput = ({ showSearchIcon, placeholder, pressable, onPress, style }: SearchInputProps) => {
+const SearchInput = ({ showSearchIcon, pressable, onPress, style, ...props }: SearchInputProps & { [key: string]: unknown }) => {
     const renderInput = () => (
         <View style={[styles.container, style]}>
             {showSearchIcon ? (
                 <Image style={styles.icon} source={require('../../../assets/magnifyingGlass.png')} />
             )
                 : null}
-            <TextInput editable={!pressable} placeholderTextColor={colors.lightGray} style={styles.input} placeholder={placeholder} />
+            <TextInput {...props} editable={!pressable} placeholderTextColor={colors.lightGray} style={styles.input} />
         </View>
     )
     if (pressable) {

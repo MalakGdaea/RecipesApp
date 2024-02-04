@@ -11,6 +11,7 @@ type SplashProps = {
 }
 
 const Splash = ({ navigation }: SplashProps) => {
+
     return (
         <ImageBackground style={styles.background} source={require('../../../assets/splash.png')}>
             <View style={styles.container}>
