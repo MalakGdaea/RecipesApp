@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from "./src/screens/Home";
 import Search from "./src/screens/Search";
+import RecipeDetails from "./src/screens/RecipeDetails";
 import BackButton from "./src/components/BackButton";
 import { useState, useEffect } from "react";
 import { getRecipes } from "./src/API";
@@ -51,6 +52,10 @@ export default function App() {
               headerLeft: () => (
                 <BackButton goBack={navigation.goBack} />
               ),
+            })} />
+            <Stack.Screen name="RecipeDetails" component={RecipeDetails} options={({ navigation }) => ({
+              headerLeft: () =>
+                <BackButton goBack={navigation.goBack} />, title: ''
             })} />
           </Stack.Navigator>
         </NavigationContainer>

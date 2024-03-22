@@ -5,8 +5,15 @@ import styles from './styles'
 import Card from "../../components/Card";
 import { RecipesContext } from "../../contexts";
 import Recipe from "../../types/Recipe";
+import RootStackParamList from "../../types/RootStackParamList";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const Search = () => {
+type SearchNavigationProp = StackNavigationProp<RootStackParamList, 'Search'>;
+type SearchProps = {
+    navigation: SearchNavigationProp
+}
+
+const Search = ({ navigation }: SearchProps) => {
     const { recipes } = useContext(RecipesContext);
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
     const [keyword, setKeyword] = useState('');
@@ -31,7 +38,8 @@ const Search = () => {
                     <Card
                         title={item?.name}
                         time={item?.cook_time_minutes}
-                        image={item?.thumbnail_url} />
+                        image={item?.thumbnail_url}
+                        onPress={() => navigation.navigate('RecipeDetails', { item })} />
                 )} />
         </SafeAreaView>
     )

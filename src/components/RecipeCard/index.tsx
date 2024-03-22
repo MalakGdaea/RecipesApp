@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, ViewStyle } from "react-native";
+import { View, Text, Image, ViewStyle, TouchableOpacity } from "react-native";
 import styles from "./styles";
 import Author from "../../types/Author";
 import Rating from "../Rating";
@@ -11,11 +11,12 @@ type RecipeCardProps = {
     rating: number,
     time: string,
     style: ViewStyle,
+    onPress: () => void
 }
 
-const RecipeCard = ({ title, image, author, rating, time, style }: RecipeCardProps) => {
+const RecipeCard = ({ title, image, author, rating, time, style, onPress }: RecipeCardProps) => {
     return (
-        <View style={[styles.container, style]}>
+        <TouchableOpacity onPress={onPress} style={[styles.container, style]}>
             <View style={styles.row}>
                 <View style={{ flex: 1 }}>
                     <Text numberOfLines={1} style={styles.title}>{title}</Text>
@@ -33,7 +34,7 @@ const RecipeCard = ({ title, image, author, rating, time, style }: RecipeCardPro
                     <Text style={styles.footerText}>{time} min</Text>
                 </View> : <View></View>}
             </View>
-        </View>
+        </TouchableOpacity>
     )
 };
 

@@ -20,6 +20,7 @@ const Home = ({ navigation }: HomeProps) => {
     const [tags, setTags] = useState<string[]>([]);
     const { recipes } = useContext(RecipesContext);
     const { healthyRecipes } = useContext(HealthyRecipesContext);
+    const [filteredRecipes, setFilteredRecipes] = useState(recipes);
 
     useEffect(() => {
         const tagsList: string[] = [];
@@ -31,7 +32,19 @@ const Home = ({ navigation }: HomeProps) => {
             });
         })
         setTags([...tagsList]);
-    }, recipes);
+    }, [recipes]);
+
+    useEffect(() => {
+        if (selectedTag) {
+            const filteredItems = recipes.filter((recipe) => {
+                const tag = recipe.tags.find(t => t?.name == selectedTag);
+                return !!tag;
+            })
+            setFilteredRecipes(filteredItems);
+        } else {
+            setFilteredRecipes(recipes);
+        }
+    }, [selectedTag, recipes]);
 
     return (
         <View style={styles.container}>
@@ -47,19 +60,21 @@ const Home = ({ navigation }: HomeProps) => {
                         time={item?.cook_time_minutes}
                         rating={item?.user_ratings?.score} style={index === 0 ? { marginLeft: 3 } : {}}
                         image={item?.thumbnail_url}
-                        author={{ name: item.credits[0].name, image_url: item.credits[0].image_url }} />
+                        author={{ name: item.credits[0].name, image_url: item.credits[0].image_url }}
+                        onPress={() => navigation.navigate('RecipeDetails', { item })} />
                 )}
             />
             <Categories categories={tags} selectedCategory={selectedTag} onCategoryPress={setSelectedTag} />
             <FlatList
                 horizontal
-                data={recipes}
+                data={filteredRecipes}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
                     <Card
                         title={item?.name}
                         time={item?.cook_time_minutes}
-                        image={item?.thumbnail_url} />
+                        image={item?.thumbnail_url}
+                        onPress={() => navigation.navigate('RecipeDetails', { item })} />
                 )}
             />
         </View>
